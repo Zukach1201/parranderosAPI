@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Body
 from fastapi.middleware.cors import CORSMiddleware
 from pymongo import MongoClient
 from datetime import datetime
@@ -24,11 +24,12 @@ def inicio():
 
 @app.get("/bares")
 def get_bares():
-    return db["Bares"].find()
+    return list(db["Bares"].find({},{'_id':0}))
 
 @app.post("/bares")
-def post_bares(datos: list):
+def post_bares(datos: list = Body(...)):
     resultado = db["Bares"].insert_many(datos)
+    return {"resultado": "UwU"}
 
 @app.get('/bares/{bar_id}/comentarios')
 def get_comentarios(bar_id: int):
